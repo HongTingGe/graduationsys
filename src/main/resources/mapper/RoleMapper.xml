@@ -1,0 +1,23 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.RoleMapper" >
+
+    <resultMap id="getRoleByIdMap" type="com.ght.graduationsys.entity.Role">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <collection property="permissionList" column="id"
+                    ofType="com.ght.graduationsys.entity.Permission"
+                    select="com.ght.graduationsys.dao.RolePermissionMapper.getPermissionsByRid"
+        >
+
+        </collection>
+    </resultMap>
+
+    <select id="getRoleById" resultMap="getRoleByIdMap">
+        select r.* from role r
+        where r.id=#{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>欢迎页面-X-admin2.2</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="/static/css/font.css">
+        <link rel="stylesheet" href="/static/css/xadmin.css">
+        <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/js/xadmin.js"></script>
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <form class="layui-form layui-col-space5">
+                                <div class="layui-inline layui-show-xs-block">
+                                    <input class="layui-input"  autocomplete="off" placeholder="开始日" name="start" id="start">
+                                </div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <input class="layui-input"  autocomplete="off" placeholder="截止日" name="end" id="end">
+                                </div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="layui-card-header">
+                            <h3>待审核课题</h3>
+                        </div>
+
+                        <table class="layui-hide" id="test1" lay-filter="demo"></table>
+
+                        <script type="text/html" id="barDemo">
+                            <a class="layui-btn layui-btn-xs" lay-event="edit">详细</a>
+                        </script>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <script>
+
+            function timeFormat(time) {
+
+
+                //date是传入的时间
+                let d = new Date(time);
+
+                let month = (d.getMonth() + 1) < 10 ? '0'+(d.getMonth() + 1) : (d.getMonth() + 1);
+                let day = d.getDate()<10 ? '0'+d.getDate() : d.getDate();
+                let hours = d.getHours()<10 ? '0'+d.getHours() : d.getHours();
+                let min = d.getMinutes()<10 ? '0'+d.getMinutes() : d.getMinutes();
+                let sec = d.getSeconds()<10 ? '0'+d.getSeconds() : d.getSeconds();
+
+                let times=d.getFullYear() + '年' + month + '月' + day + '日 ' + hours + ':' + min + ':' + sec;
+
+
+
+                return times;
+
+
+            }
+
+            var rowData1;
+            var myObj;
+
+
+            layui.use('table', function(){
+                var table = layui.table
+                    ,form = layui.form;
+
+                table.render({
+                    elem: '#test1'
+                    ,cols: [[
+                        {field:'id', title:'项目编号'}
+                        ,{field:'sid', title:'学号'}
+                        ,{field:'sname', title:'姓名'}
+                        ,{field:'majorClazz', title:'专业班级'}
+                        ,{field:'name', title: '课题名称'}
+                        ,{field:'type', title: '课题类型'}
+                        //,{field:'members', title: '小组成员'}
+                        ,{field:'createtime', title: '申报时间'}
+                        ,{field:'status', title: '状态'}
+                        ,{fixed: 'right', title:'操作',align:'center', toolbar: '#barDemo'}
+                    ]],
+                    data: [{
+                        "id":""
+                        ,"sid": ""
+                        ,"sname": ""
+                        ,"majorClazz": ""
+                        ,"name": ""
+                        ,"type": ""
+                        //,"members": ""
+                        ,"createtime": ""
+                        ,"status": ""
+                    }]
+                    ,page: true
+                });
+
+                $("tbody").remove();
+
+
+
+                let user=JSON.parse(sessionStorage.getItem("user"));
+
+                $.ajax({
+                    url:'/director/taskitem/unchecked/list',
+                    type:'post',
+                    data:{
+                        id:user.id
+                    },
+                    success:function (res) {
+                        let taskItems =new Array();
+                        for (let i in res){
+                            let taskItemInfo={
+                                "id":res[i].id,
+                                "sid" : res[i].sid,
+                                "sname" : res[i].sname,
+                                "majorClazz" : res[i].majorClazz,
+                                "name" : res[i].name,
+                                "type" : res[i].type,
+                                //"members" : res[i].members,
+                                "createtime" : timeFormat(res[i].createtime),
+                                "status":`<span class="layui-btn layui-btn-normal layui-btn-mini">未审核</span>`
+                            };
+                            taskItems.push(taskItemInfo);
+                        }
+
+                        layui.table.reload("test1",{
+                            data:taskItems  // 将新数据重新载入表格
+                        });
+                    }
+                });
+
+
+
+
+                //监听工具条
+                table.on('tool(demo)', function(obj){
+                    myObj=obj;
+                    rowData1 = obj.data;
+                    if(obj.event === 'edit'){
+                        layer.open({
+                            type: 2,
+                            title: '详细信息',
+                            area: ['850px', '600px'],
+                            anim: 2,
+                            content: ['/director/taskitem/info/unchecked', 'yes'] //iframe的url，no代表不显示滚动条
+
+                        });
+                    }
+                });
+            });
+        </script>
+
+    </body>
+
+</html>

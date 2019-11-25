@@ -1,0 +1,57 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.StudentMapper">
+
+    <resultMap id="getStudentByIdMap" type="com.ght.graduationsys.entity.Student">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="password" property="password"></result>
+        <association property="college" column="cid" javaType="com.ght.graduationsys.entity.College"
+                     select="com.ght.graduationsys.dao.ClassMapper.getCollegeByCid"/>
+        <association property="major" column="cid" javaType="com.ght.graduationsys.entity.Major"
+                     select="com.ght.graduationsys.dao.MajorMapper.getMajorByClassId"/>
+        <association property="clazz" column="cid" javaType="com.ght.graduationsys.entity.Clazz"
+                     select="com.ght.graduationsys.dao.ClassMapper.getClassById"/>
+        <collection property="roleList" column="id"
+                    ofType="com.ght.graduationsys.entity.Role"
+                    select="com.ght.graduationsys.dao.UserRoleMapper.getRolesByUid"
+        >
+
+        </collection>
+    </resultMap>
+
+    <select id="getStudentById" resultMap="getStudentByIdMap">
+        select * from student where id=#{id}
+    </select>
+
+    <select id="getClassById" resultType="string">
+        select CONCAT_WS(' ',m.name,c.name) from student s,class c,major m
+        where s.id=#{id} and s.cid=c.id and c.mid=m.id
+    </select>
+
+    <update id="updateStudent" parameterType="com.ght.graduationsys.entity.Student">
+        update student set phone=#{phone},email=#{email},name=#{name} where id=#{id}
+    </update>
+
+    <update id="updatePasswordById" parameterType="String">
+        update student set password=#{psw} where id=#{id}
+    </update>
+
+    <select id="getPasswordById" resultType="string">
+        select password from student where id=#{id}
+    </select>
+
+    <select id="getDirectorIdById" resultType="string">
+        select directorid from student s,class c,major m
+        where s.id=#{id} and s.cid=c.id and c.mid=m.id
+    </select>
+
+    <select id="getStudentBasicInfoById" resultType="com.ght.graduationsys.entity.StudentBasicInfo">
+        select s.id id,s.name name,c1.name clazz,m.name major,c2.name college
+         from student s,class c1,major m,college c2
+        where s.id=#{sid} and s.cid=c1.id and c1.mid=m.id and m.cid=c2.id
+    </select>
+
+</mapper>

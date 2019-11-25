@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>申报课题详情页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form layui-form-pane" id="taskitemForm">
+
+            <div class="layui-form-item">
+                <label for="id" class="layui-form-label">
+                    申报编号
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="id" name="id" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="name" class="layui-form-label">
+                    课题名称
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="name" name="name" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="type" class="layui-form-label">
+                    课题方向
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="type" name="type" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="student" class="layui-form-label">
+                    申报人
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="student" name="student" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item" id="status">
+                <label for="status" class="layui-form-label">
+                    状态
+                </label>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="createtime" class="layui-form-label">
+                    申报时间
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="createtime" name="createtime" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label for="msg" class="layui-form-label">申报描述</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入内容" id="detail" name="detail" class="layui-textarea" readonly></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="msg" class="layui-form-label">批注</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入内容" id="msg" name="msg" class="layui-textarea"></textarea>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item" style="text-align:center">
+                <button class="layui-btn" lay-filter="pass" lay-submit="">通过</button>
+                <button class="layui-btn" lay-filter="repulse" lay-submit="">不通过</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/static/js/director-taskitemdeclare-info-check.js"></script>
+
+</body>
+
+</html>

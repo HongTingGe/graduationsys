@@ -1,0 +1,40 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.TaskItemMapper">
+
+    <insert id="addTaskItem" parameterType="com.ght.graduationsys.entity.TaskItem">
+        insert into
+        taskitem(id,sid,sname,majorClazz,`name`,`type`,directorid,members,status,details,createtime)
+        values (#{id},#{sid},#{sname},#{majorClazz},#{name},
+        #{type},#{directorid},#{members},#{status},#{details},#{createtime})
+    </insert>
+
+    <select id="getTaskItemsByDirectorId" parameterType="string" resultType="com.ght.graduationsys.entity.TaskItem">
+        select * from taskitem where directorid=#{id} and status=0
+    </select>
+
+    <select id="getCheckedTaskItemsByDirectorId" parameterType="string" resultType="com.ght.graduationsys.entity.TaskItem">
+        select * from taskitem where directorid=#{id} and status=1
+    </select>
+
+    <update id="updateTaskItemById" parameterType="com.ght.graduationsys.entity.TaskItem">
+        update taskitem set status=#{status},teacherid=#{teacherid},msg=#{msg} where id=#{id}
+    </update>
+
+    <update id="studentUpdateTaskItemById" parameterType="com.ght.graduationsys.entity.TaskItem">
+        update taskitem set status=0,name=#{name},type=#{type},members=#{members},details=#{details}
+        where id=#{id}
+
+    </update>
+
+    <select id="getTaskItemById" resultType="com.ght.graduationsys.entity.TaskItem">
+        select * from taskitem where id=#{id}
+    </select>
+
+    <select id="getStudentTaskItemBySid" resultType="com.ght.graduationsys.entity.TaskItem">
+        select *from taskitem where sid=#{sid}
+    </select>
+
+</mapper>

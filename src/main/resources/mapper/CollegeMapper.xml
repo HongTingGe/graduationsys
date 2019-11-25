@@ -1,0 +1,30 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.CollegeMapper">
+
+    <resultMap id="collegeMap" type="com.ght.graduationsys.entity.College">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <collection property="majorList"
+                    ofType="com.ght.graduationsys.entity.Major"
+                    column="id"
+                    select="com.ght.graduationsys.dao.MajorMapper.getMajorsByCid"
+        />
+    </resultMap>
+
+    <select id="getAllColleges" resultMap="collegeMap">
+        select * from college
+    </select>
+
+
+    <select id="getCollegeByCid" resultType="com.ght.graduationsys.entity.College">
+        select * from college where id=#{id}
+    </select>
+
+    <select id="getCollegeByMajorId" resultType="com.ght.graduationsys.entity.College">
+        select c.* from college c , major m where m.id=#{id} and c.id=m.cid
+    </select>
+
+</mapper>

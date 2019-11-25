@@ -1,0 +1,44 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.MajorMapper">
+
+    <resultMap id="majorMap" type="com.ght.graduationsys.entity.Major">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <collection property="teacherList"
+                    column="id"
+                    select="com.ght.graduationsys.dao.TeacherMapper.getTeacherByMid"/>
+        <collection property="classList"
+                    column="id"
+                    select="com.ght.graduationsys.dao.ClassMapper.getClassesByMid"/>
+    </resultMap>
+
+    <select id="getAllMajors" resultMap="majorMap">
+        select * from major
+    </select>
+
+    <select id="getMajorsByCid" resultMap="majorMap">
+        select * from major where cid=#{cid}
+    </select>
+
+    <select id="getMajorByClassId" resultType="com.ght.graduationsys.entity.Major">
+        select m.* from major m,class c where c.id=#{classId} and c.mid=m.id
+    </select>
+
+    <!--根据系名称获取系主任-->
+    <select id="getDirectorIdByMajorName" resultType="string">
+        select directorid from major where name=#{name}
+    </select>
+
+    <select id="getMajorById" resultType="com.ght.graduationsys.entity.Major">
+        select * from major where id=#{id}
+    </select>
+
+    <!--根据系ID获取系主任-->
+    <select id="getDirectorIdById" resultType="String">
+        select directorid from major where id=#{id}
+    </select>
+
+</mapper>

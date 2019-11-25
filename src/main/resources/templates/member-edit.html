@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]--></head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label for="sid" class="layui-form-label">
+                    学号
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="sid" name="sid" required="" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="name" class="layui-form-label">
+                    姓名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="name" name="name" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="college" class="layui-form-label">
+                    专业班级
+                </label>
+                <div class="layui-input-inline">
+                    <select name="college" id="college" lay-filter="college" lay-verify="required">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="major" id="major" lay-filter="major" lay-verify="required">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="class" id="class" lay-verify="required">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+
+    layui.use(['form', 'layer'],
+        function() {
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+
+            $("#sid").val(parent.rowData.sid);
+            $("#name").val(parent.rowData.username);
+
+
+
+
+
+
+
+
+
+            //监听提交
+            form.on('submit(add)',
+
+                function(data) {
+                    parent.flag=false;
+                    layer.alert("请点击确定保存退出", {
+                            closeBtn: 0,
+                            icon: 6
+                        },
+                        function() {
+
+                            parent.flag=true;
+
+                            parent.updateMember(data.field);
+
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+
+                        });
+                    return false;
+                });
+
+
+            var college = $("#college"),
+                major = $("#major"),
+                clazz = $("#class");
+
+            var majorList;
+            $.ajax({
+                url : 'http://localhost:8080/college/list',
+                type : 'post',
+                async : false,
+                success:function (res) {
+                    majorList=res;
+                }
+            });
+
+            for (let i in majorList){
+                addEle(college, majorList[i].name);
+            }
+
+
+
+
+
+            //赋予完成 重新渲染select
+            form.render('select');
+
+            //向select中 追加内容
+            function addEle(ele, value) {
+                var optionStr = "";
+                optionStr = "<option value=" + value + " >" + value + "</option>";
+                ele.append(optionStr);
+            }
+
+            //移除select中所有项 赋予初始值
+            function removeEle(ele) {
+                ele.find("option").remove();
+                var optionStar = "<option value=" + "" + ">" + "请选择" + "</option>";
+                ele.append(optionStar);
+            }
+
+            var collegeText,
+                collegeIndex,
+                majorText;
+
+            //选定学院后 将该学院的专业系读取追加上
+            form.on('select(college)', function(data) {
+                collegeText = data.value;
+                $.each(majorList, function(i, item) {
+                    if (collegeText == item.name) {
+                        collegeIndex = i;
+                        return collegeIndex;
+                    }
+                });
+                removeEle(major);
+                removeEle(clazz);
+                $.each(majorList[collegeIndex].majorList, function(i, item) {
+                    addEle(major, item.name);
+                });
+                //重新渲染select
+                form.render('select');
+            });
+
+            //选定专业后 将对应的专业班级读取追加上
+            form.on('select(major)', function(data) {
+                majorText = data.value;
+                removeEle(clazz);
+                $.each(majorList, function(i, item) {
+
+                    if (collegeText == item.name) {
+                        majorItem = i;
+                        return majorItem;
+                    }
+                });
+                $.each(majorList[majorItem].majorList, function(i, item) {
+
+                    if (majorText == item.name) {
+                        for (var n = 0; n < item.classList.length; n++) {
+                            addEle(clazz, item.classList[n].name);
+                        }
+                    }
+                })
+                //重新渲染select
+                form.render('select');
+            });
+
+
+        });
+</script>
+</body>
+
+</html>

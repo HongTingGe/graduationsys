@@ -1,0 +1,12 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.UserRoleMapper">
+
+    <select id="getRolesByUid" resultMap="com.ght.graduationsys.dao.RoleMapper.getRoleByIdMap">
+        select r.* from user_role ur,role r
+        where ur.uid=#{id} and ur.rid=r.id
+    </select>
+
+</mapper>

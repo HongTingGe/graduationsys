@@ -1,0 +1,84 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.TaskItemSignUpDao">
+
+    <resultMap id="taskItemSignUpMap1" type="com.ght.graduationsys.entity.TaskItemSignUpBasicInfo">
+        <result column="id" property="id"/>
+        <result column="directorid" property="directorid"/>
+        <result column="detail" property="detail"/>
+        <result column="status" property="status"/>
+        <result column="msg" property="msg"/>
+        <result column="createtime" property="createtime"/>
+        <result column="isprincipal" property="isprincipal"/>
+        <association property="taskItemDeclareBasicInfo" column="declareid" select="com.ght.graduationsys.dao.TaskItemDeclareDao.getTaskItemDeclareBasicInfoById"/>
+        <association property="studentBasicInfo" column="studentid" select="com.ght.graduationsys.dao.StudentBasicInfoMapper.getStudentBasicInfoById"/>
+        <association property="teacherBasicInfo" column="teacherid" select="com.ght.graduationsys.dao.TeacherBasicInfoMapper.getTeacherBasicInfoById"/>
+    </resultMap>
+
+    <select id="getTaskItemSignUpByStudentid" resultMap="taskItemSignUpMap1">
+        select * from taskitem_signup
+        where studentid=#{studentid}
+    </select>
+
+    <insert id="addTaskItemSignUp" parameterType="com.ght.graduationsys.entity.TaskItemSignUpBasicInfo">
+        insert into taskitem_signup(id,declareid,studentid,directorid,detail,status,createtime,isprincipal)
+        values (#{id},#{taskItemDeclareBasicInfo.id},#{studentBasicInfo.id},#{directorid},#{detail},0,#{createtime},#{isprincipal})
+    </insert>
+
+
+    <delete id="deleteTaskItemSignUpByDeclareid">
+        delete from taskitem_signup where declareid=#{declareid}
+    </delete>
+
+
+    <select id="getStudentIdsByDeclareId" resultType="String">
+        select studentid from taskitem_signup where declareid=#{declareid} and studentid !=#{myid}
+    </select>
+
+
+    <!--根据系主任id获取课题报名-->
+    <select id="getTaskItemSignUpByDirectorid" resultMap="taskItemSignUpMap1">
+        select * from taskitem_signup where directorid=#{directorid} and isprincipal=1 and status!=-1
+    </select>
+
+    <!--根据系主任id获取未审批课题报名-->
+    <select id="getUncheckedTaskItemSignUpByDirectorid" resultMap="taskItemSignUpMap1">
+        select * from taskitem_signup where directorid=#{directorid} and isprincipal=1 and status=0
+    </select>
+
+    <!--根据系主任id获取已审批课题报名-->
+    <select id="getCheckedTaskItemSignUpByDirectorid" resultMap="taskItemSignUpMap1">
+        select * from taskitem_signup where directorid=#{directorid} and isprincipal=1 and status=1
+    </select>
+
+
+    <!--根据申报课题id获取报名同学-->
+    <select id="getMembersByDeclareid" resultType="com.ght.graduationsys.entity.StudentBasicInfo">
+        select s.id id,s.name name,c1.name clazz,m.name major,c2.name college
+         from taskitem_signup ts,student s,class c1,major m,college c2
+        where declareid=#{declareid} and studentid=s.id
+        and s.cid=c1.id and c1.mid=m.id and m.cid=c2.id
+    </select>
+
+    <!--报名成功-->
+    <update id="successTaskItemSignUpByDeclareid">
+        update taskitem_signup set status=1,msg=#{msg},teacherid=#{teacherid}
+        where declareid=#{declareid}
+    </update>
+
+
+    <!--报名失败-->
+    <update id="failTaskItemSignUpByDeclareid">
+        update taskitem_signup set status=-1,msg=#{msg},teacherid=#{teacherid}
+         where declareid=#{declareid}
+    </update>
+
+    <!--根据学生id删除报名信息-->
+    <delete id="deleteTaskItemSignUpByStudentId">
+        delete from taskitem_signup where studentid = #{studentId}
+    </delete>
+
+
+</mapper>

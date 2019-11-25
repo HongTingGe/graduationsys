@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>查看报名</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]--></head>
+
+<body>
+
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+
+                <div class="layui-card-header">
+                    <h3>查看报名</h3>
+                </div>
+
+                <div class="layui-card-body">
+                    <form class="layui-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">课题名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="taskitemName" autocomplete="off" class="layui-input" readonly>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">小组成员</label>
+                            <div class="layui-input-block">
+                                <div class="layui-form"  id="form1">
+                                    <table class="layui-table">
+                                        <colgroup>
+                                            <col width="240">
+                                            <col width="180">
+                                            <col width="200">
+                                            <col width="200">
+                                            <col>
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th>学院</th>
+                                            <th>专业</th>
+                                            <th>班级</th>
+                                            <th>学号</th>
+                                            <th>姓名</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="members">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="layui-form" id="form2" style="width: 50%">
+                                    <table class="layui-hide" id="test" lay-filter="test"></table>
+
+                                    <script type="text/html" id="toolbarDemo">
+                                        <div class="layui-btn-container">
+                                            <button type="button" class="layui-btn layui-btn-sm" lay-event="addMember">新增</button>
+                                            <button type="button" class="layui-btn layui-btn-sm" lay-event="deleteMember">删除</button>
+                                        </div>
+                                    </script>
+
+                                    <script type="text/html" id="barDemo">
+                                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">报名描述</label>
+                            <div class="layui-input-block">
+                                <textarea id="detail" name="detail" placeholder="请输入内容" class="layui-textarea" required lay-verify="required"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">状态</label>
+                                <div class="layui-input-inline" id="btnStatus">
+                                    <button type="button" class="layui-btn layui-btn-normal">无</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">指导老师</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="teacher" autocomplete="off" class="layui-input" readonly>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">审批批注</label>
+                            <div class="layui-input-block">
+                                <textarea id="msg" placeholder="请输入内容" class="layui-textarea" readonly ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">报名时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="createtime" autocomplete="off" class="layui-input" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item" id="againSignUpBtn" style="display: none">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="againSignUp">重新报名</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+
+</div>
+
+<script src="/static/js/student-taskitem-signup-check.js"></script>
+
+
+</body>
+
+</html>
+

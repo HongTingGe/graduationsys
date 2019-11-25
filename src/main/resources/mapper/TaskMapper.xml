@@ -1,0 +1,33 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.TaskMapper">
+
+    <select id="getAllTasks" resultType="com.ght.graduationsys.entity.Task">
+        select t.*,m.name from task t,major m
+    </select>
+
+    <select id="getTasksByMajorId" resultType="com.ght.graduationsys.entity.Task">
+        select t.id,t.name,m.name major
+        from task t,major m
+        where t.majorid=#{majorid} and t.majorid=m.id
+    </select>
+
+    <update id="updateTaskById" parameterType="com.ght.graduationsys.entity.Task">
+        update task set `name`=#{name} where id=#{id}
+    </update>
+
+    <delete id="deleteTaskById">
+        delete from task where id=#{id}
+    </delete>
+
+    <insert id="addTask" parameterType="com.ght.graduationsys.entity.Task">
+        insert into task(`name`,majorid) values (#{name},#{majorid})
+    </insert>
+
+    <select id="getTaskById" resultType="com.ght.graduationsys.entity.Task">
+        select * from task where id=#{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,75 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.TaskItemDeclareDao">
+
+    <insert id="addTaskItemDeclare" parameterType="com.ght.graduationsys.entity.TaskItemDeclare">
+        insert into taskitem_declare(id,`name`,typeid,studentid,directorid,detail,createtime)
+        values (#{id},#{name},#{typeid},#{studentid},#{directorid},#{detail},#{createtime})
+    </insert>
+
+
+    <resultMap id="selectTaskItemMap" type="com.ght.graduationsys.entity.TaskItemDeclare">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="status" property="status"/>
+        <result column="detail" property="detail"/>
+        <result column="msg" property="msg"/>
+        <result column="createtime" property="createtime"/>
+        <association column="typeid" property="task" select="com.ght.graduationsys.dao.TaskMapper.getTaskById"/>
+        <association property="student" column="studentid" select="com.ght.graduationsys.dao.StudentBasicInfoMapper.getStudentBasicInfoById"/>
+    </resultMap>
+
+    <select id="selectTaskItemByStudentId" resultMap="selectTaskItemMap">
+        select * from taskitem_declare where studentid=#{studentid} order by createtime desc
+    </select>
+
+
+    <!--根据系主任Id查找所有课题申报-->
+    <select id="getTaskItemDeclaresByDirectorId" resultMap="selectTaskItemMap">
+        select * from taskitem_declare where directorid=#{directorid} and status!=-1 order by createtime desc
+    </select>
+
+    <!--根据系主任Id查找所有已申报成功的课题申报-->
+    <select id="getCheckedTaskItemDeclaresByDirectorId" resultMap="selectTaskItemMap">
+        select * from taskitem_declare where directorid=#{directorid} and status=1 order by createtime desc
+    </select>
+
+    <!--根据系主任Id查找所有未审核课题申报-->
+    <select id="getUnCheckedTaskItemDeclaresByDirectorId" resultMap="selectTaskItemMap">
+        select * from taskitem_declare
+        where directorid=#{directorid} and status=0 order by createtime desc
+    </select>
+
+    <!--根据Id获取课题申报-->
+    <select id="getTaskItemDeclareById" resultMap="selectTaskItemMap">
+        select * from taskitem_declare where id=#{id}
+    </select>
+
+    <!--更新课题申报-->
+    <update id="updateTaskItemDeclareById" parameterType="com.ght.graduationsys.entity.TaskItemDeclare">
+        update taskitem_declare set msg=#{msg},status=#{status} where id=#{id}
+    </update>
+
+    <!--学生更新课题申报-->
+    <update id="studentUpdateTaskItemDeclareById" parameterType="com.ght.graduationsys.entity.TaskItemDeclare">
+        update taskitem_declare set `name`=#{name},typeid=#{typeid},msg=#{msg},status=#{status},detail=#{detail} where id=#{id}
+    </update>
+
+    <!--学生获取申报成功的课题-->
+    <select id="getSuccessedTaskItemDeclareByStudentid" resultType="com.ght.graduationsys.entity.TaskItemDeclare">
+        select * from taskitem_declare where studentid=#{studentid} and status=1
+    </select>
+
+    <select id="getTaskItemDeclareBasicInfoById" resultType="com.ght.graduationsys.entity.TaskItemDeclareBasicInfo">
+        select id , `name` from taskitem_declare where id=#{id}
+    </select>
+
+    <select id="getTasksByDirectorId" resultType="com.ght.graduationsys.entity.Task">
+        select t.* from taskitem_declare td, task t
+        where td.directorid = #{directorid} and td.typeid = t.id
+    </select>
+
+</mapper>
+

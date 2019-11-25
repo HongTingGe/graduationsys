@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]--></head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" id="taskitemForm">
+            <div class="layui-form-item">
+                <label for="id" class="layui-form-label">
+                    项目编号
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="id" name="id" lay-verify="required" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="sid" class="layui-form-label">
+                    学号
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="sid" name="sid" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="sname" class="layui-form-label">
+                    姓名
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="sname" name="sname" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="majorClazz" class="layui-form-label">
+                    专业班级
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="majorClazz" name="majorClazz" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="name" class="layui-form-label">
+                    课题名称
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="name" name="name" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="type" class="layui-form-label">
+                    课题方向
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="type" name="type" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+
+
+            <div class="layui-form-item layui-form-text" id="membersItem">
+                <label for="members" class="layui-form-label">小组成员</label>
+                <div class="layui-input-block">
+                    <textarea id="members" name="members" class="layui-textarea" readonly></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="details" class="layui-form-label">
+                    描述
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="details" name="details" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="createtime" class="layui-form-label">
+                    申报时间
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="createtime" name="createtime" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label for="teacher" class="layui-form-label">
+                    指导老师
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="teacher" name="teacher" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label for="msg" class="layui-form-label">批注</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入内容" id="msg" name="msg" class="layui-textarea" lay-verify="required" readonly></textarea>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <button class="layui-btn" lay-filter="retrial" lay-submit="">重审</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+    function timeFormat(time) {
+
+
+        //date是传入的时间
+        let d = new Date(time);
+
+        let month = (d.getMonth() + 1) < 10 ? '0'+(d.getMonth() + 1) : (d.getMonth() + 1);
+        let day = d.getDate()<10 ? '0'+d.getDate() : d.getDate();
+        let hours = d.getHours()<10 ? '0'+d.getHours() : d.getHours();
+        let min = d.getMinutes()<10 ? '0'+d.getMinutes() : d.getMinutes();
+        let sec = d.getSeconds()<10 ? '0'+d.getSeconds() : d.getSeconds();
+
+        let times=d.getFullYear() + '年' + month + '月' + day + '日 ' + hours + ':' + min + ':' + sec;
+
+
+
+        return times;
+
+
+    }
+
+    layui.use(['form', 'layer'],
+        function() {
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+            $.ajax({
+                url:'/taskitem/infoId',
+                type:'post',
+                data:{
+                    id:parent.rowData.id
+                },
+                success:function (res) {
+                    $("#id").val(res.id);
+                    $("#sid").val(res.sid);
+                    $("#sname").val(res.sname);
+                    $("#majorClazz").val(res.majorClazz);
+                    $("#name").val(res.name);
+                    $("#type").val(res.type);
+                    $("#details").val(res.details);
+
+                    $.ajax({
+                        url:'/pub/teacher/getName',
+                        type:'post',
+                        data:{
+                            id:res.teacherid
+                        },
+                        success:function (name) {
+                            $("#teacher").val(name);
+                        }
+                    });
+
+
+                    $("#msg").val(res.msg);
+                    $("#createtime").val(timeFormat(res.createtime));
+                    let members=JSON.parse(res.members);
+                    for (let member of members){
+                        member={
+                            major:member.major,
+                            sid:member.id,
+                            name:member.name,
+                            class:member.clazz
+                        }
+                        $("#members").append("专业:"+member.major+" "+" 班级:"+member.class+" "+" 学号:"+member.sid+" "+" 姓名:"+member.name)
+                    }
+                }
+            });
+
+
+            //监听提交
+            form.on('submit(retrial)',
+
+                function(data) {
+
+                    layer.alert("确定重审么", {
+                            icon: 6
+                        },
+                        function() {
+
+                            $.ajax({
+                                url:'/director/taskitem/update',
+                                type:'post',
+                                data:{
+                                    id : $("#id").val(),
+                                    status : 0,
+                                    teacherid : "",
+                                    msg : ""
+                                },
+                                success:function () {
+                                    parent.myObj.del();
+                                    // 获得frame索引
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    //关闭当前frame
+                                    parent.layer.close(index);
+
+                                }
+                            })
+
+                        });
+                    return false;
+
+                });
+
+
+        });
+
+
+
+</script>
+
+</body>
+
+</html>

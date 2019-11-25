@@ -1,0 +1,66 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.ReportMapper">
+
+    <insert id="addReport" parameterType="com.ght.graduationsys.entity.Report">
+        insert into report(id,`name`,previewpath,realpath,studentid,teacherid,msg,createtime)
+        values (#{id},#{name},#{previewpath},#{realpath},#{studentid},#{teacherid},#{msg},#{createtime})
+    </insert>
+
+
+    <resultMap id="getReportsByTidMap" type="com.ght.graduationsys.entity.Report">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="path" column="path"/>
+        <result property="studentid" column="studentid"/>
+        <result property="teacherid" column="teacherid"/>
+        <result property="msg" column="msg"/>
+        <result property="status" column="status"/>
+        <result property="createtime" column="createtime"/>
+        <association property="studentBasicInfo" javaType="com.ght.graduationsys.entity.StudentBasicInfo"
+                     column="studentid" select="com.ght.graduationsys.dao.StudentBasicInfoMapper.getStudentBasicInfoById"/>
+    </resultMap>
+
+    <select id="getReportsByTid" resultMap="getReportsByTidMap">
+        select * from report where teacherid=#{tid} order by createtime desc
+    </select>
+
+    <select id="getCheckedReportsByTid" resultMap="getReportsByTidMap">
+        select * from report where teacherid=#{tid} and status=0 order by createtime desc
+    </select>
+
+    <select id="getUncheckedReportsByTid" resultMap="getReportsByTidMap">
+        select * from report where teacherid=#{tid} and status=-1 order by createtime desc
+    </select>
+
+    <resultMap id="getReportsBySidMap" type="com.ght.graduationsys.entity.Report">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="path" column="path"/>
+        <result property="msg" column="msg"/>
+        <result property="status" column="status"/>
+        <result property="createtime" column="createtime"/>
+        <association property="teacherBasicInfo" javaType="com.ght.graduationsys.entity.TeacherBasicInfo"
+                     column="teacherid" select="com.ght.graduationsys.dao.TeacherBasicInfoMapper.getTeacherBasicInfoById"/>
+    </resultMap>
+
+    <select id="getReportsBySid" resultMap="getReportsBySidMap">
+        select * from report where studentid=#{sid} order by createtime desc
+    </select>
+
+    <select id="getCheckedReportsBySid" resultMap="getReportsBySidMap">
+        select * from report where studentid=#{tid} and status=0 order by createtime desc
+    </select>
+
+    <select id="getUncheckedReportsBySid" resultMap="getReportsBySidMap">
+        select * from report where studentid=#{tid} and status=-1 order by createtime desc
+    </select>
+
+    <update id="updateReportById">
+        update report set msg=#{msg} , status=0 where id=#{id}
+    </update>
+
+
+</mapper>

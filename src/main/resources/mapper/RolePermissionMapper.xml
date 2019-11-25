@@ -1,0 +1,12 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.RolePermissionMapper">
+
+    <select id="getPermissionsByRid" resultType="com.ght.graduationsys.entity.Permission">
+        select p.* from role_permission rp, permission p
+        where rid=#{rid} and rp.pid=p.id
+    </select>
+
+</mapper>

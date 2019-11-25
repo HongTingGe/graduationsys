@@ -1,0 +1,15 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.PermissionMapper">
+
+    <select id="getPermissionsByPmid" resultType="com.ght.graduationsys.entity.Permission">
+        select * from permission where pmid=#{id}
+    </select>
+
+    <select id="getPermissionById" resultType="com.ght.graduationsys.entity.Permission">
+        select * from permission where id=#{id}
+    </select>
+
+</mapper>

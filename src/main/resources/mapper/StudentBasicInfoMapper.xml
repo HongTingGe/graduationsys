@@ -1,0 +1,15 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.StudentBasicInfoMapper">
+
+
+    <select id="getStudentBasicInfoById" resultType="com.ght.graduationsys.entity.StudentBasicInfo">
+        select s.id id,s.name name,c1.name clazz,m.name major,c2.name college
+         from student s,class c1,major m,college c2
+        where s.id=#{sid} and s.cid=c1.id and c1.mid=m.id and m.cid=c2.id
+    </select>
+
+
+</mapper>

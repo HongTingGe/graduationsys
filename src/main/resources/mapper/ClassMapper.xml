@@ -1,0 +1,21 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.ClassMapper">
+
+    <select id="getClassesByMid" resultType="com.ght.graduationsys.entity.Clazz">
+        select * from class where mid=#{mid}
+    </select>
+
+    <select id="getCollegeByCid" resultType="com.ght.graduationsys.entity.College">
+        select c2.* from class c1,major m,college c2
+        where c1.id=#{cid} and c1.mid=m.id and m.cid=c2.id
+    </select>
+
+    <select id="getClassById" resultType="com.ght.graduationsys.entity.Clazz">
+        select * from class
+        where id=#{id}
+    </select>
+
+</mapper>

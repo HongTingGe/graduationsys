@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]--></head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" id="taskitemForm">
+            <div class="layui-form-item">
+                <label for="id" class="layui-form-label">
+                    项目编号
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="id" name="id" lay-verify="required" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="sid" class="layui-form-label">
+                    学号
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="sid" name="sid" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="sname" class="layui-form-label">
+                    姓名
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="sname" name="sname" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="majorClazz" class="layui-form-label">
+                    专业班级
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="majorClazz" name="majorClazz" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="name" class="layui-form-label">
+                    课题名称
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="name" name="name" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="type" class="layui-form-label">
+                    课题方向
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="type" name="type" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+
+
+            <div class="layui-form-item layui-form-text" id="membersItem">
+                <label for="members" class="layui-form-label">小组成员</label>
+                <div class="layui-input-block">
+                    <textarea id="members" name="members" class="layui-textarea" readonly></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="details" class="layui-form-label">
+                    描述
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="details" name="details" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="createtime" class="layui-form-label">
+                    申报时间
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="createtime" name="createtime" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label for="college" class="layui-form-label">
+                    指导老师
+                </label>
+                <div class="layui-input-inline">
+                    <select name="college" id="college" lay-filter="college">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="major" id="major" lay-filter="major">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="teacher" id="teacher">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item layui-form-text">
+                <label for="msg" class="layui-form-label">批注</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入内容" id="msg" name="msg" class="layui-textarea"></textarea>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <button class="layui-btn" lay-filter="pass" lay-submit="">通过</button>
+                <button class="layui-btn" lay-filter="repulse" lay-submit="">不通过</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+
+    function timeFormat(time) {
+
+
+        //date是传入的时间
+        let d = new Date(time);
+
+        let month = (d.getMonth() + 1) < 10 ? '0'+(d.getMonth() + 1) : (d.getMonth() + 1);
+        let day = d.getDate()<10 ? '0'+d.getDate() : d.getDate();
+        let hours = d.getHours()<10 ? '0'+d.getHours() : d.getHours();
+        let min = d.getMinutes()<10 ? '0'+d.getMinutes() : d.getMinutes();
+        let sec = d.getSeconds()<10 ? '0'+d.getSeconds() : d.getSeconds();
+
+        let times=d.getFullYear() + '年' + month + '月' + day + '日 ' + hours + ':' + min + ':' + sec;
+
+
+
+        return times;
+
+
+    }
+
+
+    layui.use(['form', 'layer'],
+        function() {
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+            $.ajax({
+                url:'/taskitem/infoId',
+                type:'post',
+                data:{
+                    id:parent.rowData1.id
+                },
+                success:function (res) {
+                    $("#id").val(res.id);
+                    $("#sid").val(res.sid);
+                    $("#sname").val(res.sname);
+                    $("#majorClazz").val(res.majorClazz);
+                    $("#name").val(res.name);
+                    $("#type").val(res.type);
+
+                    $("#details").val(res.details);
+                    $("#createtime").val(timeFormat(res.createtime));
+
+                    let members=JSON.parse(res.members);
+                    for (let member of members){
+                        member={
+                            major:member.major,
+                            sid:member.id,
+                            name:member.name,
+                            class:member.clazz
+                        }
+                        $("#members").append("专业:"+member.major+" "+" 班级:"+member.class+" "+" 学号:"+member.sid+" "+" 姓名:"+member.name)
+                    }
+                }
+            });
+
+
+            var college = $("#college"),
+                major = $("#major"),
+                teacher = $("#teacher");
+
+            var collegeList;
+
+            $.ajax({
+                url:"/college/list",
+                type: 'post',
+                async: false,
+                success:function (res) {
+                    collegeList=res;
+                }
+            });
+
+
+            for (let i in collegeList){
+                addEle(college, collegeList[i].name);
+            }
+
+
+            //赋予完成 重新渲染select
+            form.render('select');
+
+            //向select中 追加内容
+            function addEle(ele, value) {
+                var optionStr = "";
+                optionStr = "<option value=" + value + " >" + value + "</option>";
+                ele.append(optionStr);
+            }
+
+            //向select中 追加内容
+            function addTeacherEle(ele, item) {
+                var optionStr = "";
+                optionStr = "<option value=" + item.id + " >" + item.name + "</option>";
+                ele.append(optionStr);
+            }
+
+            //移除select中所有项 赋予初始值
+            function removeEle(ele) {
+                ele.find("option").remove();
+                var optionStar = "<option value=" + "" + ">" + "请选择" + "</option>";
+                ele.append(optionStar);
+            }
+
+            var collegeText,
+                collegeIndex,
+                majorText;
+
+
+            //选定学院后 将该学院的专业系读取追加上
+            form.on('select(college)', function(data) {
+                collegeText = data.value;
+                $.each(collegeList, function(i, item) {
+                    if (collegeText == item.name) {
+                        collegeIndex = i;
+                        return collegeIndex;
+                    }
+                });
+                removeEle(major);
+                removeEle(teacher);
+                $.each(collegeList[collegeIndex].majorList, function(i, item) {
+                    addEle(major, item.name);
+                });
+                //重新渲染select
+                form.render('select');
+            });
+
+            //选定专业后 将对应的教师读取追加上
+            form.on('select(major)', function(data) {
+                majorText = data.value;
+                removeEle(teacher);
+                $.each(collegeList, function(i, item) {
+                    if (collegeText == item.name) {
+                        majorItem = i;
+                        return majorItem;
+                    }
+                });
+                $.each(collegeList[majorItem].majorList, function(i, item) {
+                    if (majorText == item.name) {
+                        for (var n = 0; n < item.teacherList.length; n++) {
+                            addTeacherEle(teacher, item.teacherList[n]);
+                        }
+                    }
+                })
+                //重新渲染select
+                form.render('select');
+            });
+
+
+
+            //监听提交
+            form.on('submit(pass)',
+
+                function(data) {
+
+                let teacher=$("#teacher").val();
+                let msg=$("#msg").val();
+
+                if (teacher.trim()==""){
+                    layer.msg('请填写指导老师!');
+                    return false;
+                }
+
+                    if (msg.trim()==""){
+                        layer.msg('请填写批注信息!');
+                        return false;
+                    }
+
+                    layer.alert("确定审核通过么", {
+                            icon: 6
+                        },
+                        function() {
+
+                            $.ajax({
+                                url:'/director/taskitem/update',
+                                type:'post',
+                                data:{
+                                    id : $("#id").val(),
+                                    status : 1,
+                                    teacherid : $("#teacher").val(),
+                                    msg : $("#msg").val()
+                                },
+                                success:function () {
+                                    parent.myObj.del();
+                                    // 获得frame索引
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    //关闭当前frame
+                                    parent.layer.close(index);
+
+                                }
+                            })
+
+
+                        });
+                    return false;
+
+                });
+
+
+            //监听提交
+            form.on('submit(repulse)',
+
+                function(data) {
+                    let msg=$("#msg").val();
+
+
+                    if (msg.trim()==""){
+                        layer.msg('请填写批注信息!');
+                        return false;
+                    }
+
+
+                    layer.alert("确定打回么", {
+                            icon: 6
+                        },
+                        function() {
+
+
+
+                            $.ajax({
+                                url:'/director/taskitem/update',
+                                type:'post',
+                                data:{
+                                    id : $("#id").val(),
+                                    status : 2,
+                                    teacherid : "",
+                                    msg : $("#msg").val()
+                                },
+                                success:function () {
+                                    parent.myObj.del();
+                                    // 获得frame索引
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    //关闭当前frame
+                                    parent.layer.close(index);
+
+                                }
+                            })
+
+                        });
+                    return false;
+                });
+
+        });
+
+
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ght.graduationsys.dao.TeacherMapper">
+
+    <select id="getTeacherByMid" resultType="com.ght.graduationsys.entity.Teacher">
+        select * from teacher where mid=#{mid}
+    </select>
+
+
+    <resultMap id="getTeacherByIdMap" type="com.ght.graduationsys.entity.Teacher">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <association property="college" column="mid" javaType="com.ght.graduationsys.entity.College"
+                     select="com.ght.graduationsys.dao.CollegeMapper.getCollegeByMajorId"/>
+        <association property="major" column="mid" javaType="com.ght.graduationsys.entity.Major"
+                     select="com.ght.graduationsys.dao.MajorMapper.getMajorById"/>
+
+        <collection property="roleList" column="id"
+                    ofType="com.ght.graduationsys.entity.Role"
+                    select="com.ght.graduationsys.dao.UserRoleMapper.getRolesByUid"/>
+    </resultMap>
+
+    <select id="getTeacherById" resultMap="getTeacherByIdMap">
+        select * from teacher  where id=#{id}
+    </select>
+
+
+    <select id="getTeacherNameById" resultType="String">
+        SELECT CONCAT_WS(' ', c.`name`, m.`name`,t.`name`) from college c, teacher t,major m where t.id=#{id} and t.mid=m.id and m.cid=c.id
+    </select>
+
+    <update id="updateTeacher" parameterType="com.ght.graduationsys.entity.Teacher">
+        update teacher set phone=#{phone},email=#{email},name=#{name} where id=#{id}
+    </update>
+
+    <update id="updatePasswordById" parameterType="String">
+        update teacher set password=#{psw} where id=#{id}
+    </update>
+
+    <select id="getPasswordById" resultType="string">
+        select password from teacher where id=#{id}
+    </select>
+
+    <select id="getAllTaskItemsByTid" resultType="com.ght.graduationsys.entity.TaskItem">
+        select * from taskitem where teacherid=#{id}
+    </select>
+
+
+</mapper>
